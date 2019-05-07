@@ -1,0 +1,22 @@
+{% macro error_display(errors) %}
+	{% if errors %}
+	<div class="col-12">
+		{# Combine form errors and flash errors in one unique strucutre #}
+		{% if errors is mapping %}
+			{% set errors = errors.items() %}
+		{% else %}
+			{% set errors = [(None, errors)] %}
+		{% endif %}
+		{% for error_key, error_list in errors %}
+			{% for error in error_list %}
+				<div class="alert alert-warning" role="alert">
+					{% if error_key %}
+						{{error_key}} : 
+					{% endif %}
+					{{error}}
+				</div>
+			{% endfor %}
+		{% endfor %}
+	</div>
+	{% endif %}
+{% endmacro %}

@@ -1,0 +1,27 @@
+{% extends "layouts/common.html" %}
+
+{% import "macros/errordisplay.html" as errormacros %}
+{% block content %}
+{{ errormacros.error_display(form.errors) }}
+{% with messages = get_flashed_messages() %}
+	{{ errormacros.error_display(messages) }}
+{% endwith %}
+<form method="POST" action="{{url_for('register')}}">
+	{{form.csrf_token}}
+	{{form.username.label}} {{form.username(size=20)}}
+	<br />
+	{{form.password.label}} {{form.password}}
+	<br />
+	{{form.email.label}} {{form.email(pattern=".+@.+")}}
+	<br />
+	{{form.firstname.label}} {{form.firstname}}
+	<br />
+	{{form.lastname.label}} {{form.lastname}}
+	<br />
+	{{form.dob.label}} {{form.dob(class_="date", pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}")}}
+	<br />
+	{{form.address.label}} {{form.address}}
+	<br />
+	{{form.submit}}
+</form>
+{% endblock %}

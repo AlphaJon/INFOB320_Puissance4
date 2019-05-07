@@ -1,0 +1,18 @@
+{% extends "layouts/common.html" %}
+{% import "macros/errordisplay.html" as errormacros %}
+{% block content %}
+
+{{ errormacros.error_display(form.errors) }}
+{% with messages = get_flashed_messages() %}
+	{{ errormacros.error_display(messages) }}
+{% endwith %}
+
+<form method="POST" action="{{url_for('login')}}">
+	{{form.csrf_token}}
+	{{form.username.label}} {{form.username(size=20)}}
+	<br />
+	{{form.password.label}} {{form.password}}
+	<br />
+	{{form.submit}}
+</form>
+{% endblock %}
