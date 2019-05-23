@@ -1,0 +1,54 @@
+/*class=note-item complete
+class=note-item incomplete
+class=task-title
+class=task-check
+class=task-toggle btn btn-primary
+class=task-uncheck
+class=task-toggle btn btn-warning*/
+
+#main-game-container, #game-info {
+	margin: 0 auto;
+}
+
+table#main-game {
+	margin: 0 auto;
+	width: 35vw;
+	height: 30vw;
+	border-collapse: separate;
+	border-spacing: 10px;
+	background-color: #0000aa;
+}
+
+.c4-cell-display {
+	border-radius: 50%;
+	width: 5vw;
+	height: 5vw;
+	display: inline-block;
+}
+
+.c4-cell {
+	border-width: 10px;
+	border-color: #0000aa;
+	border-radius: 50%;
+	background-color: white;
+}
+
+.c4-cell:hover {
+	background-color: green;
+}
+
+.pred {
+	background-color: #aa0000;
+}
+
+.pyellow {
+	background-color: #aaaa00;
+}
+
+.pred.winning {
+	background-color: red;
+}
+
+.pyellow.winning {
+	background-color: yellow;
+}
