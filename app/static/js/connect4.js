@@ -136,7 +136,8 @@ function renderGameHtml(grid){
 		$(this).removeClass("pred pyellow winning");
 		$(this).addClass(classesToApply);
 		//console.log("("+cellCol+","+cellRow+")");
-	})
+	});
+	//var strings = ["your turn", "the other player's turn"]
 }
 
 $("#group-add-btn").click(function(){
@@ -163,14 +164,6 @@ $("#main-game").click(function(ev){
 	//ev.target goes for the innermost tag
 	if ($(self).hasClass("c4-cell")) {
 		var cellCol = $(self).attr("x-col");
-		//var cellRow = $(self.parentElement).attr("x-row");
-		/*$.ajax({
-			url: "/api/task/" + taskId + "/toggle",
-			method: "GET",
-			success: function(result){
-				currentGame.play(result);
-			}
-		})*/
 		currentGame.play(cellCol);
 		ev.preventDefault();
 		//console.log(this);
@@ -186,27 +179,6 @@ $(".game-new").click(function(){
 	}
 	
 });
-
-$(".group-show").click(function(){
-	$(".note-item").show();
-	$(".task-filter").prop("checked", false);
-});
-
-$(".group-filter").click(function(){
-	var groupId = $(this).attr("x-group");
-	$(".note-item").hide();
-	$(".note-item[x-group="+groupId+"]").show();
-	$(".task-filter").prop("checked", false);
-});
-
-$(".task-filter").change(function(){
-	if ($(this).prop('checked')) {
-		$(".complete").css("display", "none");
-	} else {
-		$(".complete").css("display", "");
-	}
-	
-})
 
 localPlayerColor = 0;
 currentGame = new Connect4();

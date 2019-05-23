@@ -6,8 +6,13 @@ class=task-toggle btn btn-primary
 class=task-uncheck
 class=task-toggle btn btn-warning*/
 
-#main-game-container, #game-info {
+#main-game-container {
 	margin: 0 auto;
+}
+
+#game-info {
+	margin: 0 auto;
+	width: 35vw;
 }
 
 table#main-game {

@@ -2,7 +2,7 @@ from app import app, db
 from app.forms import LoginForm,RegisterForm
 from app.models import User
 from app.models import load_user
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, login_user, logout_user, current_user
 from werkzeug.urls import url_parse
 import json, datetime
@@ -18,13 +18,14 @@ def install():
 	)
 	user_account.set_password("user1")
 
-	user_account = User(
+	user_account2 = User(
 		username = "user2",
-		email = "u1@a.com",
+		email = "u2@a.com",
 	)
-	user_account.set_password("user2")
+	user_account2.set_password("user2")
 
 	db.session.add(user_account)
+	db.session.add(user_account2)
 
 	db.session.commit()
 	return redirect(url_for("root"))
@@ -32,7 +33,7 @@ def install():
 @app.route("/")
 #@login_required
 def root():
-	return render_template("index.html")
+	return render_template("index.html") 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,7 +49,6 @@ def login():
 			and user.check_password(form.password.data)):
 
 			login_user(user)
-			user.set_logged(True);
 			next_page = request.args.get("next")
 			#if next_page and url_parse(next_page).netloc == "":
 			#	return redirect(next_page)
@@ -61,7 +61,6 @@ def login():
 
 @app.route("/logout")
 def logout():
-	current_user.set_logged(False);
 	logout_user()
 	return redirect(url_for("root"))
 
@@ -72,7 +71,7 @@ def register():
 	form = RegisterForm()
 	if form.validate_on_submit():
 		name = form.username.data
-		if load_user_by_name(name) is not None:
+		if User.load_by_name(name) is not None:
 			flash("Username is already taken", "warning")
 			return redirect(url_for("register"))
 		#populate user data
@@ -82,8 +81,8 @@ def register():
 			)
 		user.set_password(form.password.data)
 		db.session.add(user)
+		db.session.commit()
 		login_user(user)
-		user.set_logged(True);
 		return redirect(url_for("root"))
 	else:
 		return render_template("register_form.html", form=form)

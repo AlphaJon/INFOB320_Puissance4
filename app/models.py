@@ -3,12 +3,6 @@ from app import login_manager, db
 from werkzeug.security import generate_password_hash, check_password_hash
 import json, datetime
 
-#User array
-logged_users = []
-
-#Game array
-ongoing_games = []
-
 class User(UserMixin, db.Model):
 	#def __init__(self, name):
 	#	super(User, self).__init__()
@@ -25,19 +19,10 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(16), unique=True, nullable=False)
 	email = db.Column(db.String(255), unique=True, nullable=False)
 	password_hash = db.Column(db.String(255), nullable=False)
-	games_history = db.relationship("GameHistory", backref="towner", lazy="dynamic")
-#	blocked = db.Column(db.Boolean)
+	games_history_red = db.relationship("GameHistory", backref="redp", lazy="dynamic", foreign_keys = 'GameHistory.red_player')
+	games_history_yellow = db.relationship("GameHistory", backref="yellowp", lazy="dynamic", foreign_keys = 'GameHistory.yellow_player')
+	#blocked = db.Column(db.Boolean)
 	current_game = None
-
-	@property
-	def is_authenticated(self):
-		return (self in logged_users) #self.logged logged_users
-
-	def set_logged(self, state=True):
-		if state and not (self in logged_users):
-			logged_users.append(self)
-		if not state and (self in logged_users):
-			logged_users.remove(self)
 
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -47,10 +32,6 @@ class User(UserMixin, db.Model):
 
 	def load_by_name(username):
 		return User.query.filter_by(username = username).first()
-
-	@property
-	def group(self):
-		return Group.load(self.ugroup)
 
 
 @login_manager.user_loader
@@ -67,12 +48,14 @@ class GameHistory(db.Model):
 	yellow_player = db.Column(db.Integer, db.ForeignKey("user.id"))
 	move_history = db.Column(db.String(6*7))
 	game_grid = [
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0],
-		[0,0,0,0,0,0]
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1],
+		[-1,-1,-1,-1,-1,-1]
 	]
-	
+	current_turn = 1
+	finished = False
+	winner = db.Column(db.Integer, nullable=True)
